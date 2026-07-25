@@ -250,6 +250,11 @@
     text-align:center;padding:80px 20px;color:#8a8478;grid-column:1/-1;
   }
   small.hint{display:block;color:#8a8478;font-size:11.5px;margin-top:4px;}
+  .lightbox-overlay{position:fixed;inset:0;background:rgba(20,18,16,.92);display:none;align-items:center;justify-content:center;z-index:70;padding:20px;}
+.lightbox-overlay.show{display:flex;}
+.lightbox-overlay img{max-width:100%;max-height:90vh;border-radius:10px;}
+.lightbox-overlay .close-x{position:fixed;top:18px;left:18px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;}
+.card .imgwrap{cursor:pointer;}
 </style>
 </head>
 <body data-font="classic">
@@ -680,6 +685,27 @@ async function deleteProduct(id){
 }
 
 loadStore();
+</script>
+  <div class="lightbox-overlay" id="lightboxOverlay">
+  <div class="close-x" id="closeLightbox">✕</div>
+  <img id="lightboxImg" src="" alt="">
+</div>
+<script>
+document.getElementById('grid').addEventListener('click', function(e){
+  var img = e.target.closest('.card .imgwrap img, .card img');
+  if(img){
+    document.getElementById('lightboxImg').src = img.src;
+    document.getElementById('lightboxOverlay').classList.add('show');
+  }
+});
+document.getElementById('closeLightbox').addEventListener('click', function(){
+  document.getElementById('lightboxOverlay').classList.remove('show');
+});
+document.getElementById('lightboxOverlay').addEventListener('click', function(e){
+  if(e.target.id === 'lightboxOverlay'){
+    e.target.classList.remove('show');
+  }
+});
 </script>
 </body>
 </html>

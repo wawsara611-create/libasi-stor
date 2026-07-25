@@ -421,7 +421,7 @@ function renderStore(){
 
   grid.innerHTML = products.map(p => `
     <div class="card">
-      <div class="imgwrap"><img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy"></div>
+      <div class="imgwrap" onclick="openLightbox('${p.image}')"><img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy"></div>
       <div class="info">
         <div class="name">${escapeHtml(p.name)}</div>
         <div class="price">${escapeHtml(p.price)} درهم</div>
@@ -429,20 +429,41 @@ function renderStore(){
       </div>
     </div>
   `).join('');
+           
+       
+   
+  
+  
+                  
 }
 
 function escapeHtml(str){
   if(str === undefined || str === null) return '';
   return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-}
+}function openLightbox(url){
+  let ov = document.getElementById('libasLightbox');
+  if(!ov){
+    ov = document.createElement('div');
+    ov.id = 'libasLightbox';
+    ov.style.cssText = "position:fixed;inset:0;background:rgba(10,9,8,0.92);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px;";
+    ov.onclick = ()=>{ ov.style.display='none'; };
+    const img = document.createElement('img');
+    img.id = 'libasLightboxImg';
+    img.style.cssText = "max-width:100%;max-height:100%;border-radius:10px;";
+    ov.appendChild(img);
+    document.body.appendChild(ov);
+  }
+  document.getElementById('libasLightboxImg').src = url;
+  ov.style.display = 'flex';
+  }
 
 function openOrder(id){
   const p = (store.products||[]).find(x=>x.id===id);
   if(!p) return;
   currentOrderProduct = p;
   document.getElementById('orderProductPreview').innerHTML = `
-    <img src="${p.image}">
-    <div>
+    <div class="imgwrap" onclick="openLightbox('${p.image}')"><img src="${p.image}" alt="${escapeHtml(p.name)}" loading="lazy"></div>
+   
       <div class="p-name">${escapeHtml(p.name)}</div>
       <div class="p-price">${escapeHtml(p.price)} درهم</div>
     </div>
